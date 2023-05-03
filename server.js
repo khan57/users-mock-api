@@ -1,5 +1,6 @@
 const app = require("express")();
-
+const cors = require("cors");
+app.use(cors());
 app.get("/v1/users", async (req, res) => {
   try {
     let { pageSize = 10 } = req.query;
