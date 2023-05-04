@@ -1,6 +1,7 @@
 const app = require("express")();
 const cors = require("cors");
 const fs = require("fs");
+const usersData = require("./users");
 app.use(cors());
 app.get("/v1/users", async (req, res) => {
   try {
@@ -9,20 +10,8 @@ app.get("/v1/users", async (req, res) => {
       pageSize = 100;
     }
     let users = [];
-    new Promise((resolve, reject) => {
-      fs.readFile("users.json", (err, data) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          let tempData = JSON.parse(data);
-          users = tempData.data.slice(0, pageSize);
-          resolve(users);
-        }
-      });
-    }).then((data) => {
-      return res.json({ data, recordSize: data.length });
-    });
+    users = usersData.slice(0, pageSize);
+    return res.json({ data: users, recordSize: users.length });
   } catch (error) {
     return res.json({ error: "Something went wrong" + error });
   }
